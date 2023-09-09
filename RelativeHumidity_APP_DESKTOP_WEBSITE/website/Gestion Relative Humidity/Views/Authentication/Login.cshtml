@@ -1,0 +1,66 @@
+﻿@model Gestion_Relative_Humidity.ViewModel.UserModel
+
+@{
+    ViewData["Title"] = "Login";
+}
+
+  <div class="bg" id="particles-js">
+    <img src="~/images/banner.jpg" class="absImage" />
+
+    <!-- //particles -->
+    <div class="w3ls-pos" style="text-align: center;">
+        <img src="~/images/logo.png" alt="Alternate Text" />
+        <h1 style="text-align: center;color: #fff;" class="hed1">Agence du Bassin Hydraulique du Guir-Ziz-Rhéris</h1>
+        <div class="w3ls-login box">
+            <!-- form starts here -->
+            <form asp-action="Login" method="post">
+                <div asp-validation-summary="ModelOnly" class="text-warning"></div>
+
+                <div class="agile-field-txt">
+                    <input asp-for="Email" type="text" placeholder="Email" />
+                    <span asp-validation-for="Email" class="text-light bg-warning"></span>
+                </div>
+                <div class="agile-field-txt">
+                    <input asp-for="Password" placeholder="******" id="myInput" />
+                    <span asp-validation-for="Password" class="text-warning"></span>
+                    <br />
+                </div>
+                <div class="w3ls-bot">
+                    <input type="submit" value="LOGIN">
+                </div>
+            </form>
+        </div>
+        <!-- //form ends here -->
+        <!--copyright-->
+        <div class="copy-wthree">
+            <p style="color: #adb2b7; text-align:center;">
+                © @DateTime.Now.Year All Rights Reserved | Developed by
+                <a style="color: #adb2b7;" asp-action="Contact" asp-controller="Home" target="_blank">AM_MG</a>
+            </p>
+        </div>
+        <!--//copyright-->
+    </div>
+</div>
+  <style>
+      body {
+          overflow: hidden;
+      }
+
+      .absImage {
+          height: 100vh;
+          width: 100%;
+      }
+
+      .content {
+          position: absolute;
+          top: 5%;
+          left: 50%;
+          transform: translate(-50%);
+          color: #fbfbfb;
+          z-index: 10;
+      }
+
+  </style>
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

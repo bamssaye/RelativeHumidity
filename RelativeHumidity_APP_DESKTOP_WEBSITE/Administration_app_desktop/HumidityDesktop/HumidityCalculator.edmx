@@ -1,0 +1,368 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="HumidityCalculatorModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="__EFMigrationsHistory">
+          <Key>
+            <PropertyRef Name="MigrationId" />
+          </Key>
+          <Property Name="MigrationId" Type="nvarchar" MaxLength="150" Nullable="false" />
+          <Property Name="ProductVersion" Type="nvarchar" MaxLength="32" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Bassin">
+          <Key>
+            <PropertyRef Name="BassinId" />
+          </Key>
+          <Property Name="BassinId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="NomBassin" Type="nvarchar(max)" />
+        </EntityType>
+        <EntityType Name="Observateur">
+          <Key>
+            <PropertyRef Name="ObservateurId" />
+          </Key>
+          <Property Name="ObservateurId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="NomPrenomObservateur" Type="nvarchar(max)" />
+          <Property Name="StationId" Type="int" />
+        </EntityType>
+        <EntityType Name="RelativeHumidity">
+          <Key>
+            <PropertyRef Name="RelativeHumidityId" />
+          </Key>
+          <Property Name="RelativeHumidityId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Sec" Type="real" Nullable="false" />
+          <Property Name="Mou" Type="real" Nullable="false" />
+          <Property Name="Hum" Type="real" Nullable="false" />
+          <Property Name="ThermometreMin" Type="real" Nullable="false" />
+          <Property Name="ThermometreMax" Type="real" Nullable="false" />
+          <Property Name="ThermometreMoyMaxMin" Type="real" Nullable="false" />
+          <Property Name="ThermometreMA" Type="real" Nullable="false" />
+          <Property Name="ThermometreMI" Type="real" Nullable="false" />
+          <Property Name="Heur" Type="int" Nullable="false" />
+          <Property Name="DateObservation" Type="datetime2" Precision="7" Nullable="false" />
+          <Property Name="StationId" Type="int" />
+          <Property Name="ObservateurId" Type="int" />
+        </EntityType>
+        <EntityType Name="Station">
+          <Key>
+            <PropertyRef Name="StationId" />
+          </Key>
+          <Property Name="StationId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="NomStation" Type="nvarchar(max)" />
+          <Property Name="BassinId" Type="int" />
+        </EntityType>
+        <EntityType Name="User">
+          <Key>
+            <PropertyRef Name="UserId" />
+          </Key>
+          <Property Name="UserId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Email" Type="nvarchar(max)" />
+          <Property Name="Password" Type="nvarchar(max)" />
+        </EntityType>
+        <Association Name="FK_Observateurs_Stations_StationId">
+          <End Role="Station" Type="Self.Station" Multiplicity="0..1" />
+          <End Role="Observateur" Type="Self.Observateur" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Station">
+              <PropertyRef Name="StationId" />
+            </Principal>
+            <Dependent Role="Observateur">
+              <PropertyRef Name="StationId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_RelativeHumiditys_Observateurs_ObservateurId">
+          <End Role="Observateur" Type="Self.Observateur" Multiplicity="0..1" />
+          <End Role="RelativeHumidity" Type="Self.RelativeHumidity" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Observateur">
+              <PropertyRef Name="ObservateurId" />
+            </Principal>
+            <Dependent Role="RelativeHumidity">
+              <PropertyRef Name="ObservateurId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_RelativeHumiditys_Stations_StationId">
+          <End Role="Station" Type="Self.Station" Multiplicity="0..1" />
+          <End Role="RelativeHumidity" Type="Self.RelativeHumidity" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Station">
+              <PropertyRef Name="StationId" />
+            </Principal>
+            <Dependent Role="RelativeHumidity">
+              <PropertyRef Name="StationId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Stations_Bassins_BassinId">
+          <End Role="Bassin" Type="Self.Bassin" Multiplicity="0..1" />
+          <End Role="Station" Type="Self.Station" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Bassin">
+              <PropertyRef Name="BassinId" />
+            </Principal>
+            <Dependent Role="Station">
+              <PropertyRef Name="BassinId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="HumidityCalculatorModelStoreContainer">
+          <EntitySet Name="__EFMigrationsHistory" EntityType="Self.__EFMigrationsHistory" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Bassin" EntityType="Self.Bassin" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Observateur" EntityType="Self.Observateur" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="RelativeHumidity" EntityType="Self.RelativeHumidity" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Station" EntityType="Self.Station" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="User" EntityType="Self.User" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_Observateurs_Stations_StationId" Association="Self.FK_Observateurs_Stations_StationId">
+            <End Role="Station" EntitySet="Station" />
+            <End Role="Observateur" EntitySet="Observateur" />
+          </AssociationSet>
+          <AssociationSet Name="FK_RelativeHumiditys_Observateurs_ObservateurId" Association="Self.FK_RelativeHumiditys_Observateurs_ObservateurId">
+            <End Role="Observateur" EntitySet="Observateur" />
+            <End Role="RelativeHumidity" EntitySet="RelativeHumidity" />
+          </AssociationSet>
+          <AssociationSet Name="FK_RelativeHumiditys_Stations_StationId" Association="Self.FK_RelativeHumiditys_Stations_StationId">
+            <End Role="Station" EntitySet="Station" />
+            <End Role="RelativeHumidity" EntitySet="RelativeHumidity" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Stations_Bassins_BassinId" Association="Self.FK_Stations_Bassins_BassinId">
+            <End Role="Bassin" EntitySet="Bassin" />
+            <End Role="Station" EntitySet="Station" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="HumidityCalculatorModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="C__EFMigrationsHistory">
+          <Key>
+            <PropertyRef Name="MigrationId" />
+          </Key>
+          <Property Name="MigrationId" Type="String" MaxLength="150" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="ProductVersion" Type="String" MaxLength="32" FixedLength="false" Unicode="true" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Bassin">
+          <Key>
+            <PropertyRef Name="BassinId" />
+          </Key>
+          <Property Name="BassinId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="NomBassin" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Stations" Relationship="Self.FK_Stations_Bassins_BassinId" FromRole="Bassin" ToRole="Station" />
+        </EntityType>
+        <EntityType Name="Observateur">
+          <Key>
+            <PropertyRef Name="ObservateurId" />
+          </Key>
+          <Property Name="ObservateurId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="NomPrenomObservateur" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="StationId" Type="Int32" />
+          <NavigationProperty Name="Station" Relationship="Self.FK_Observateurs_Stations_StationId" FromRole="Observateur" ToRole="Station" />
+          <NavigationProperty Name="RelativeHumidities" Relationship="Self.FK_RelativeHumiditys_Observateurs_ObservateurId" FromRole="Observateur" ToRole="RelativeHumidity" />
+        </EntityType>
+        <EntityType Name="RelativeHumidity">
+          <Key>
+            <PropertyRef Name="RelativeHumidityId" />
+          </Key>
+          <Property Name="RelativeHumidityId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Sec" Type="Single" Nullable="false" />
+          <Property Name="Mou" Type="Single" Nullable="false" />
+          <Property Name="Hum" Type="Single" Nullable="false" />
+          <Property Name="ThermometreMin" Type="Single" Nullable="false" />
+          <Property Name="ThermometreMax" Type="Single" Nullable="false" />
+          <Property Name="ThermometreMoyMaxMin" Type="Single" Nullable="false" />
+          <Property Name="ThermometreMA" Type="Single" Nullable="false" />
+          <Property Name="ThermometreMI" Type="Single" Nullable="false" />
+          <Property Name="Heur" Type="Int32" Nullable="false" />
+          <Property Name="DateObservation" Type="DateTime" Nullable="false" Precision="7" />
+          <Property Name="StationId" Type="Int32" />
+          <Property Name="ObservateurId" Type="Int32" />
+          <NavigationProperty Name="Observateur" Relationship="Self.FK_RelativeHumiditys_Observateurs_ObservateurId" FromRole="RelativeHumidity" ToRole="Observateur" />
+          <NavigationProperty Name="Station" Relationship="Self.FK_RelativeHumiditys_Stations_StationId" FromRole="RelativeHumidity" ToRole="Station" />
+        </EntityType>
+        <EntityType Name="Station">
+          <Key>
+            <PropertyRef Name="StationId" />
+          </Key>
+          <Property Name="StationId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="NomStation" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="BassinId" Type="Int32" />
+          <NavigationProperty Name="Bassin" Relationship="Self.FK_Stations_Bassins_BassinId" FromRole="Station" ToRole="Bassin" />
+          <NavigationProperty Name="Observateurs" Relationship="Self.FK_Observateurs_Stations_StationId" FromRole="Station" ToRole="Observateur" />
+          <NavigationProperty Name="RelativeHumidities" Relationship="Self.FK_RelativeHumiditys_Stations_StationId" FromRole="Station" ToRole="RelativeHumidity" />
+        </EntityType>
+        <EntityType Name="User">
+          <Key>
+            <PropertyRef Name="UserId" />
+          </Key>
+          <Property Name="UserId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Email" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Password" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <Association Name="FK_Stations_Bassins_BassinId">
+          <End Role="Bassin" Type="Self.Bassin" Multiplicity="0..1" />
+          <End Role="Station" Type="Self.Station" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Bassin">
+              <PropertyRef Name="BassinId" />
+            </Principal>
+            <Dependent Role="Station">
+              <PropertyRef Name="BassinId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Observateurs_Stations_StationId">
+          <End Role="Station" Type="Self.Station" Multiplicity="0..1" />
+          <End Role="Observateur" Type="Self.Observateur" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Station">
+              <PropertyRef Name="StationId" />
+            </Principal>
+            <Dependent Role="Observateur">
+              <PropertyRef Name="StationId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_RelativeHumiditys_Observateurs_ObservateurId">
+          <End Role="Observateur" Type="Self.Observateur" Multiplicity="0..1" />
+          <End Role="RelativeHumidity" Type="Self.RelativeHumidity" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Observateur">
+              <PropertyRef Name="ObservateurId" />
+            </Principal>
+            <Dependent Role="RelativeHumidity">
+              <PropertyRef Name="ObservateurId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_RelativeHumiditys_Stations_StationId">
+          <End Role="Station" Type="Self.Station" Multiplicity="0..1" />
+          <End Role="RelativeHumidity" Type="Self.RelativeHumidity" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Station">
+              <PropertyRef Name="StationId" />
+            </Principal>
+            <Dependent Role="RelativeHumidity">
+              <PropertyRef Name="StationId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="HumidityCalculatorEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="C__EFMigrationsHistory" EntityType="Self.C__EFMigrationsHistory" />
+          <EntitySet Name="Bassins" EntityType="Self.Bassin" />
+          <EntitySet Name="Observateurs" EntityType="Self.Observateur" />
+          <EntitySet Name="RelativeHumidities" EntityType="Self.RelativeHumidity" />
+          <EntitySet Name="Stations" EntityType="Self.Station" />
+          <EntitySet Name="Users" EntityType="Self.User" />
+          <AssociationSet Name="FK_Stations_Bassins_BassinId" Association="Self.FK_Stations_Bassins_BassinId">
+            <End Role="Bassin" EntitySet="Bassins" />
+            <End Role="Station" EntitySet="Stations" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Observateurs_Stations_StationId" Association="Self.FK_Observateurs_Stations_StationId">
+            <End Role="Station" EntitySet="Stations" />
+            <End Role="Observateur" EntitySet="Observateurs" />
+          </AssociationSet>
+          <AssociationSet Name="FK_RelativeHumiditys_Observateurs_ObservateurId" Association="Self.FK_RelativeHumiditys_Observateurs_ObservateurId">
+            <End Role="Observateur" EntitySet="Observateurs" />
+            <End Role="RelativeHumidity" EntitySet="RelativeHumidities" />
+          </AssociationSet>
+          <AssociationSet Name="FK_RelativeHumiditys_Stations_StationId" Association="Self.FK_RelativeHumiditys_Stations_StationId">
+            <End Role="Station" EntitySet="Stations" />
+            <End Role="RelativeHumidity" EntitySet="RelativeHumidities" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="HumidityCalculatorModelStoreContainer" CdmEntityContainer="HumidityCalculatorEntities">
+          <EntitySetMapping Name="C__EFMigrationsHistory">
+            <EntityTypeMapping TypeName="HumidityCalculatorModel.C__EFMigrationsHistory">
+              <MappingFragment StoreEntitySet="__EFMigrationsHistory">
+                <ScalarProperty Name="MigrationId" ColumnName="MigrationId" />
+                <ScalarProperty Name="ProductVersion" ColumnName="ProductVersion" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Bassins">
+            <EntityTypeMapping TypeName="HumidityCalculatorModel.Bassin">
+              <MappingFragment StoreEntitySet="Bassin">
+                <ScalarProperty Name="BassinId" ColumnName="BassinId" />
+                <ScalarProperty Name="NomBassin" ColumnName="NomBassin" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Observateurs">
+            <EntityTypeMapping TypeName="HumidityCalculatorModel.Observateur">
+              <MappingFragment StoreEntitySet="Observateur">
+                <ScalarProperty Name="ObservateurId" ColumnName="ObservateurId" />
+                <ScalarProperty Name="NomPrenomObservateur" ColumnName="NomPrenomObservateur" />
+                <ScalarProperty Name="StationId" ColumnName="StationId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="RelativeHumidities">
+            <EntityTypeMapping TypeName="HumidityCalculatorModel.RelativeHumidity">
+              <MappingFragment StoreEntitySet="RelativeHumidity">
+                <ScalarProperty Name="RelativeHumidityId" ColumnName="RelativeHumidityId" />
+                <ScalarProperty Name="Sec" ColumnName="Sec" />
+                <ScalarProperty Name="Mou" ColumnName="Mou" />
+                <ScalarProperty Name="Hum" ColumnName="Hum" />
+                <ScalarProperty Name="ThermometreMin" ColumnName="ThermometreMin" />
+                <ScalarProperty Name="ThermometreMax" ColumnName="ThermometreMax" />
+                <ScalarProperty Name="ThermometreMoyMaxMin" ColumnName="ThermometreMoyMaxMin" />
+                <ScalarProperty Name="ThermometreMA" ColumnName="ThermometreMA" />
+                <ScalarProperty Name="ThermometreMI" ColumnName="ThermometreMI" />
+                <ScalarProperty Name="Heur" ColumnName="Heur" />
+                <ScalarProperty Name="DateObservation" ColumnName="DateObservation" />
+                <ScalarProperty Name="StationId" ColumnName="StationId" />
+                <ScalarProperty Name="ObservateurId" ColumnName="ObservateurId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Stations">
+            <EntityTypeMapping TypeName="HumidityCalculatorModel.Station">
+              <MappingFragment StoreEntitySet="Station">
+                <ScalarProperty Name="StationId" ColumnName="StationId" />
+                <ScalarProperty Name="NomStation" ColumnName="NomStation" />
+                <ScalarProperty Name="BassinId" ColumnName="BassinId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Users">
+            <EntityTypeMapping TypeName="HumidityCalculatorModel.User">
+              <MappingFragment StoreEntitySet="User">
+                <ScalarProperty Name="UserId" ColumnName="UserId" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="Password" ColumnName="Password" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
